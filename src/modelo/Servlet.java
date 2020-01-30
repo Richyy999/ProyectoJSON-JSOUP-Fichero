@@ -33,9 +33,7 @@ public class Servlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		File file = new File("fichero");
-		file.createNewFile();
-		System.out.println(file.getAbsolutePath());
+		
 	}
 
 	/**

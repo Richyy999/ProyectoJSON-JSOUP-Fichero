@@ -1,18 +1,19 @@
 package modelo;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
+import org.json.JSONException;
+
+import modelo.entidad.Pelicula;
 
 /**
  * Servlet implementation class Servlet
@@ -20,28 +21,77 @@ import org.json.JSONObject;
 @WebServlet("/Servlet")
 public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public Servlet() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+	public Servlet() {
+		super();
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+	@SuppressWarnings("unchecked")
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		HttpSession session = request.getSession();
+		if (session.getAttribute("listaPelis") == null) {
+			List<Pelicula> listaPelis = new ArrayList<Pelicula>();
+			List<String> actores = new ArrayList<String>();
+			actores.add("yvuhb");
+			actores.add("cygvhbj");
+			actores.add("fjghkbj");
+			listaPelis.add(new Pelicula("url", "Joker", "8", "Va de joker", "yo2", actores));
+			listaPelis.add(new Pelicula("url", "Jumanji", "8", "Va de joker", "yo2", actores));
+			String tabla = GenerarHTML.crearTabla(listaPelis);
+			session.setAttribute("listaPelis", listaPelis);
+			session.setAttribute("tabla", tabla);
+			request.getRequestDispatcher("index.jsp").forward(request, response);
+		} else {
+			ParsearJSON parse = new ParsearJSON("D:Eclipse/2DAM/ProyectoJSOUP-JSON-Fichero/favoritos.json");
+			try {
+				int index = Integer.parseInt(request.getParameter("index"));
+				List<Pelicula> lista = (List<Pelicula>) session.getAttribute("listaPelis");
+				Pelicula peli = lista.get(index);
+				parse.addFavoritos(peli);
+				request.getRequestDispatcher("index.jsp").forward(request, response);
+			} catch (NumberFormatException e) {
+				String irFav = request.getParameter("irFav");
+				if (irFav != null)
+					irFav(request, parse);
+				else {
+					String titulo = request.getParameter("titulo");
+					eliminarFav(request, parse, titulo);
+				}
+				request.getRequestDispatcher("favoritos.jsp").forward(request, response);
+			}
+		}
+	}
+
+	private void eliminarFav(HttpServletRequest request, ParsearJSON parse, String titulo) {
+		List<Pelicula> listaPelis = parse.eliminarFav(titulo);
+		String tabla = GenerarHTML.crearTablaFav(listaPelis);
+		request.setAttribute("fav", tabla);
+	}
+
+	private void irFav(HttpServletRequest request, ParsearJSON parse) throws ServletException {
+		try {
+			List<Pelicula> listaPelis = parse.parsearJSON();
+			String tabla = GenerarHTML.crearTablaFav(listaPelis);
+			request.setAttribute("fav", tabla);
+		} catch (JSONException e) {
+			request.setAttribute("fav", "No hay favoritos");
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doGet(request, response);
 	}
-
 }

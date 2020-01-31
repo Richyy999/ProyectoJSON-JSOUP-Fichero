@@ -21,9 +21,33 @@ public class Pelicula {
 		this.listaActores = listaActores;
 	}
 
+	public List<String> getListaActores() {
+		return listaActores;
+	}
+
+	public String getUrlImg() {
+		return urlImg;
+	}
+
+	public String getTitulo() {
+		return titulo;
+	}
+
+	public String getNota() {
+		return nota;
+	}
+
+	public String getSinopsis() {
+		return sinopsis;
+	}
+
+	public String getDirector() {
+		return director;
+	}
+
 	public String toHTML() {
 		String tabla = "<tr><td><img src=\"" + this.urlImg + "\"/></td><td>" + this.titulo + "</td><td>" + this.sinopsis
-				+ "</td><td>" + this.director + "</td><td>" + getActores() + "</td><td>" + this.nota + "</td></tr>";
+				+ "</td><td>" + this.director + "</td><td>" + getActores() + "</td><td>" + this.nota + "</td>";
 		return tabla;
 	}
 

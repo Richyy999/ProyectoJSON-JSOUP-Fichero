@@ -1,7 +1,6 @@
 package modelo;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -38,13 +37,8 @@ public class Servlet extends HttpServlet {
 			throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		if (session.getAttribute("listaPelis") == null) {
-			List<Pelicula> listaPelis = new ArrayList<Pelicula>();
-			List<String> actores = new ArrayList<String>();
-			actores.add("yvuhb");
-			actores.add("cygvhbj");
-			actores.add("fjghkbj");
-			listaPelis.add(new Pelicula("url", "Joker", "8", "Va de joker", "yo2", actores));
-			listaPelis.add(new Pelicula("url", "Jumanji", "8", "Va de joker", "yo2", actores));
+			WebScrapping web = new WebScrapping();
+			List<Pelicula> listaPelis = web.scrapping();
 			String tabla = GenerarHTML.crearTabla(listaPelis);
 			session.setAttribute("listaPelis", listaPelis);
 			session.setAttribute("tabla", tabla);

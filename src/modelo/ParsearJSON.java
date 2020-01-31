@@ -22,7 +22,6 @@ public class ParsearJSON {
 
 	public ParsearJSON() {
 		this.jsonFile = new File("D:Eclipse/2DAM/ProyectoJSOUP-JSON-Fichero/favoritos.json");
-		cargarFichero();
 	}
 
 	private void cargarFichero() {
@@ -38,6 +37,7 @@ public class ParsearJSON {
 	}
 
 	public void addFavoritos(Pelicula peli) {
+		cargarFichero();
 		JSONArray root = null;
 		if (json.equals(""))
 			root = new JSONArray();
@@ -63,6 +63,7 @@ public class ParsearJSON {
 	}
 
 	public List<Pelicula> parsearJSON() throws JSONException {
+		cargarFichero();
 		List<Pelicula> lista = new ArrayList<Pelicula>();
 		JSONArray root = new JSONArray(json);
 		for (int i = 0; i < root.length(); i++) {
@@ -83,6 +84,7 @@ public class ParsearJSON {
 	}
 
 	public List<Pelicula> eliminarFav(String tituloPeli) {
+		cargarFichero();
 		List<Pelicula> listaPelis = new ArrayList<Pelicula>();
 		JSONArray root = new JSONArray(json);
 		for (int i = 0; i < root.length(); i++) {

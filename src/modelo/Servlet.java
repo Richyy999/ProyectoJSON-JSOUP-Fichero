@@ -50,7 +50,7 @@ public class Servlet extends HttpServlet {
 			session.setAttribute("tabla", tabla);
 			request.getRequestDispatcher("index.jsp").forward(request, response);
 		} else {
-			ParsearJSON parse = new ParsearJSON("D:Eclipse/2DAM/ProyectoJSOUP-JSON-Fichero/favoritos.json");
+			ParsearJSON parse = new ParsearJSON();
 			try {
 				int index = Integer.parseInt(request.getParameter("index"));
 				List<Pelicula> lista = (List<Pelicula>) session.getAttribute("listaPelis");

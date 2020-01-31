@@ -20,8 +20,8 @@ public class ParsearJSON {
 
 	private String json;
 
-	public ParsearJSON(String ruta) {
-		this.jsonFile = new File(ruta);
+	public ParsearJSON() {
+		this.jsonFile = new File("D:Eclipse/2DAM/ProyectoJSOUP-JSON-Fichero/favoritos.json");
 		cargarFichero();
 	}
 

@@ -58,5 +58,4 @@ public class Pelicula {
 		}
 		return actores.substring(0, actores.length() - 2);
 	}
-
 }

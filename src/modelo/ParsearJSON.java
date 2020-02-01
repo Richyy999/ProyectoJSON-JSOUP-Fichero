@@ -36,30 +36,42 @@ public class ParsearJSON {
 		}
 	}
 
-	public void addFavoritos(Pelicula peli) {
+	public String addFavoritos(Pelicula peli) {
+		String mensaje = "Película añadida";
 		cargarFichero();
-		JSONArray root = null;
-		if (json.equals(""))
-			root = new JSONArray();
-		else
-			root = new JSONArray(json);
-		JSONObject peliJSON = new JSONObject();
-		peliJSON.put("titulo", peli.getTitulo());
-		peliJSON.put("url", peli.getUrlImg());
-		peliJSON.put("director", peli.getDirector());
-		peliJSON.put("sinopsis", peli.getSinopsis());
-		peliJSON.put("nota", peli.getNota());
-		JSONArray actores = new JSONArray();
-		for (String estring : peli.getListaActores()) {
-			actores.put(estring);
+		List<Pelicula> list = parsearJSON();
+		boolean contiene = false;
+		for (Pelicula pelicula : list) {
+			if (pelicula.getTitulo().equals(peli.getTitulo()))
+				contiene = true;
 		}
-		peliJSON.put("actores", actores);
-		root.put(peliJSON);
-		try (FileWriter fw = new FileWriter(jsonFile);) {
-			fw.write(root.toString());
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (contiene)
+			mensaje = "La película ya está en favoritos";
+		else {
+			JSONArray root = null;
+			if (json.equals(""))
+				root = new JSONArray();
+			else
+				root = new JSONArray(json);
+			JSONObject peliJSON = new JSONObject();
+			peliJSON.put("titulo", peli.getTitulo());
+			peliJSON.put("url", peli.getUrlImg());
+			peliJSON.put("director", peli.getDirector());
+			peliJSON.put("sinopsis", peli.getSinopsis());
+			peliJSON.put("nota", peli.getNota());
+			JSONArray actores = new JSONArray();
+			for (String estring : peli.getListaActores()) {
+				actores.put(estring);
+			}
+			peliJSON.put("actores", actores);
+			root.put(peliJSON);
+			try (FileWriter fw = new FileWriter(jsonFile);) {
+				fw.write(root.toString());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		return mensaje;
 	}
 
 	public List<Pelicula> parsearJSON() throws JSONException {
@@ -89,9 +101,10 @@ public class ParsearJSON {
 		JSONArray root = new JSONArray(json);
 		for (int i = 0; i < root.length(); i++) {
 			JSONObject peli = root.getJSONObject(i);
-			if (peli.getString("titulo").equals(tituloPeli))
+			if (peli.getString("titulo").equals(tituloPeli)) {
 				root.remove(i);
-			else {
+				i--;
+			} else {
 				String director = peli.getString("director");
 				String titulo = peli.getString("titulo");
 				String nota = peli.getString("nota");

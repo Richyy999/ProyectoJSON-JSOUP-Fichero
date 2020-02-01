@@ -42,6 +42,9 @@ a {
 <body>
 	<%
 		out.print("<a href=\"Servlet?irFav=true\"><div class=\"boton\">Ver Favoritos</div></a>");
+		String mensaje = (String) request.getAttribute("men");
+		if (mensaje != null)
+			out.print(mensaje);
 		String tabla = (String) session.getAttribute("tabla");
 		out.print(tabla);
 	%>

@@ -49,7 +49,8 @@ public class Servlet extends HttpServlet {
 				int index = Integer.parseInt(request.getParameter("index"));
 				List<Pelicula> lista = (List<Pelicula>) session.getAttribute("listaPelis");
 				Pelicula peli = lista.get(index);
-				parse.addFavoritos(peli);
+				String mensaje = parse.addFavoritos(peli);
+				request.setAttribute("men", mensaje);
 				request.getRequestDispatcher("index.jsp").forward(request, response);
 			} catch (NumberFormatException e) {
 				String irFav = request.getParameter("irFav");
